@@ -1,0 +1,12 @@
+%YAML:1.0
+---
+mode: "camera"                         # 运行模式：image 单图估计，camera 实时估计
+image_path: "../pose/assert/sample.png" # mode=image 时输入图片路径
+camera_type: "realsense"              # 实时模式相机类型：realsense 或 orbbec
+intrinsics_source: "sdk"              # 内参来源：sdk 或 yaml
+calib_yaml_path: "../pose/assert/intrinsic_calib.yaml" # mode=image 或 yaml 内参模式时使用
+marker_size_m: 0.04                    # STag 实际边长，单位米
+library_hd: 21                         # STag 码库类型：11/13/15/17/19/21/23
+camera_width: 1280                     # 相机采集宽度
+camera_height: 720                     # 相机采集高度
+camera_fps: 30                         # 相机采集帧率

@@ -1,0 +1,22 @@
+%YAML:1.0
+---
+input_mode: "camera"             # 输入模式：camera 实时采样，images 离线图片标定
+camera_type: "realsense"         # 相机类型：realsense 或 orbbec
+camera_width: 1280               # 相机采集宽度
+camera_height: 720               # 相机采集高度
+camera_fps: 30                   # 相机采集帧率
+
+board_type: "chessboard"         # 标定板类型：chessboard 棋盘格，acircles 非对称圆点阵
+board_cols: 9                    # 标定板每行内角点/圆点数
+board_rows: 6                    # 标定板每列内角点/圆点数
+square_size_mm: 23.0             # 相邻角点或圆点中心间距，单位毫米
+min_samples: 20                  # 参与标定的最少有效样本数
+auto_capture: 1                  # 是否开启自动采样，1 开启，0 关闭
+auto_capture_interval_ms: 500    # 自动采样的最小时间间隔，单位毫秒
+auto_capture_min_center_shift_px: 25.0  # 自动采样的最小中心位移阈值，单位像素
+min_sharpness_score: 120.0       # 模糊过滤阈值，拉普拉斯方差低于该值则跳过，<=0 表示关闭
+
+# input_mode=images 时使用，默认读取 calib/assert/ 中保存的原始样本图
+images_glob: "assert/raw_*.png"
+
+output_yaml: "intrinsic_calib.yaml"     # 输出内参文件名，实际保存在 build/calib/ 下

@@ -67,3 +67,14 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+
+.idea
+3rdparty/*
+aruco/calib/assert/raw_*.png
+aruco/calib/intrinsic_calib.yaml
+aruco/pose/*_out.*
+aruco/pose/assert/.sample_out.png
+stag/pose/assert/*_out.*
+
+cmake-*

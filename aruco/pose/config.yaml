@@ -1,0 +1,12 @@
+%YAML:1.0
+---
+mode: "camera"                        # 运行模式：image 单图估计，camera 实时估计
+image_path: "./sample.png"            # mode=image 时输入图片路径
+camera_type: "realsense"              # 相机类型：realsense 或 orbbec
+intrinsics_source: "sdk"              # 内参来源：sdk 读取相机内参，yaml 读取标定文件
+calib_yaml_path: "./intrinsic_calib.yaml"  # intrinsics_source=yaml 时使用
+marker_size_m: 0.0225                 # 标记实际边长，单位米
+dictionary: "DICT_4X4_50"             # ArUco 字典名称，需与生成和打印保持一致
+camera_width: 1280                    # 相机采集宽度
+camera_height: 720                    # 相机采集高度
+camera_fps: 30                        # 相机采集帧率

@@ -1,0 +1,23 @@
+%YAML:1.0
+---
+CameraMatrix: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+   data: [ 9.0984652006682552e+02, 0., 6.4281051001518404e+02, 0.,
+       9.0829866079632768e+02, 3.4424250706745232e+02, 0., 0., 1. ]
+DistCoeffs: !!opencv-matrix
+   rows: 5
+   cols: 1
+   dt: d
+   data: [ 1.2207639837432957e-01, -4.0213365400204920e-01,
+       -1.0700574184490529e-04, -1.4361655933714254e-03,
+       3.5028314729434157e-01 ]
+ReprojectionError: 2.0232671501515037e-01
+ImageWidth: 1280
+ImageHeight: 720
+BoardType: chessboard
+BoardCols: 9
+BoardRows: 6
+SquareSizeMm: 23.
+Samples: 27

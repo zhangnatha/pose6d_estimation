@@ -1,0 +1,10 @@
+%YAML:1.0
+---
+dictionary: "DICT_4X4_50"
+start_id: 0                 # 起始标记 ID
+count: 12                   # 生成标记数量
+marker_size_mm: 40.0        # 单个标记的物理边长，单位毫米
+dpi: 300                    # 输出图片分辨率
+border_bits: 1              # 标记黑色边框宽度
+layout_mode: "grid"         # 排版模式：grid 网格排版，single 单张居中
+orientation: "portrait"     # 纸张方向：portrait 纵向，landscape 横向

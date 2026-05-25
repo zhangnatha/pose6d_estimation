@@ -1,0 +1,6 @@
+%YAML:1.0
+---
+hd: 21                      # STag 码库类型：11/13/15/17/19/21/23
+start_id: 0                 # 起始 STag ID
+count: 12                   # 生成数量
+output_dir: ""              # 留空时自动生成目录，如 HD21_ID0_11
