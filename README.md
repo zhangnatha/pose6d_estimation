@@ -91,7 +91,7 @@ cd pose6d_estimation
 - `3rdparty/orbbec`
 - `3rdparty/stag`
 
-## 🪟 Windows 安装注意事项
+## 💻 Windows 安装注意事项
 
 Windows 下建议提前准备以下环境：
 
@@ -206,81 +206,62 @@ flowchart LR
 
 ## 🧮 PnP 位姿估计原理
 
-位姿估计的核心是 `PnP` 问题：已知相机内参 `K`、畸变参数、标记物实际边长，以及标记角点在图像中的像素坐标，求解标记相对于相机的 6DoF 位姿。
+位姿估计的核心是 `PnP` 问题：已知相机内参 $K$、畸变参数、标记物实际边长，以及标记角点在图像中的像素坐标，求解标记相对于相机的 6DoF 位姿。
 
-<img src="assets/.PnP.png" alt="PnP 原理示意图" width="58%">
+<img src="./assets/.PnP.png" alt="PnP 原理示意图" width="58%">
 
+- **世界坐标系 ($P_{world}$)**：在标记平面上定义的 3D 坐标系，四个角点的 3D 坐标由实际边长唯一确定。
+- **相机坐标系 ($P_{camera}$)**：以相机光心为原点的 3D 坐标系。
+- **像素坐标系 ($P_{pixels}$)**：图像平面中的 2D 坐标系，角点检测结果直接落在这里。
 
-
-- 世界坐标系 `P_world`
-  在标记平面上定义的 3D 坐标系，四个角点的 3D 坐标由实际边长唯一确定
-- 相机坐标系 `P_camera`
-  以相机光心为原点的 3D 坐标系
-- 像素坐标系 `P_pixels`
-  图像平面中的 2D 坐标系，角点检测结果直接落在这里
-
-整体关系：
-
+整体投影关系映射如下：
 
 $$
-标记平面 3D 角点 Pw  --[R|t]-->  相机坐标 Pc  --K-->  像素坐标 Pp
+\mathbf{P}_{world} \xrightarrow{[\mathbf{R}|\mathbf{t}]} \mathbf{P}_{camera} \xrightarrow{\mathbf{K}} \mathbf{P}_{pixels}
 $$
-
-
 
 ### Step 1: 世界坐标到相机坐标
 
-利用外参矩阵 `[R|t]` 将标记平面的 3D 点变换到相机坐标系：
+利用外参矩阵 $[\mathbf{R}|\mathbf{t}]$ 将标记平面的 3D 点变换到相机坐标系：
 
 $$
 \mathbf{P}_{camera} = \mathbf{R} \cdot \mathbf{P}_{world} + \mathbf{t}
 $$
 
-- `R`：旋转矩阵
-- `t`：平移向量
+- $\mathbf{R}$：旋转矩阵
+- $\mathbf{t}$：平移向量
 
 ### Step 2: 相机坐标到像素坐标
 
-再利用相机内参矩阵 `K` 投影到图像平面：
+再利用相机内参矩阵 $\mathbf{K}$ 投影到图像平面：
 
 $$
 s \cdot \mathbf{p} = \mathbf{K} \cdot \mathbf{P}_{camera}
 $$
 
 $$
-\mathbf{K} =
-\begin{bmatrix}
-f_x & 0 & c_x \\
-0 & f_y & c_y \\
-0 & 0 & 1
-\end{bmatrix}
+\mathbf{K} = \begin{bmatrix} f_x & 0 & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{bmatrix}
 $$
 
 其中：
 
-- `f_x, f_y` 是焦距
-- `c_x, c_y` 是主点
-- `s` 是尺度因子
+- $f_x, f_y$ 是焦距
+- $c_x, c_y$ 是主点
+- $s$ 是尺度因子
 
 ### Step 3: 合并求解
 
-得到完整约束：
-
+结合上述步骤得到完整线性约束方程：
 
 $$
 s \begin{bmatrix} u \\ v \\ 1 \end{bmatrix} = \mathbf{K} \left( \mathbf{R} \begin{bmatrix} U \\ V \\ W \end{bmatrix} + \mathbf{t} \right)
 $$
 
-展开：
-
+展开完整矩阵映射形式：
 
 $$
-s \begin{bmatrix} u \\ v \\ 1 \end{bmatrix} = 
-\underbrace{\begin{bmatrix} f_x & 0 & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{bmatrix}}_{\mathbf{K} \text{ (内参)}}
-\underbrace{\begin{bmatrix} r_{11} & r_{12} & r_{13} & t_x \\ r_{21} & r_{22} & r_{23} & t_y \\ r_{31} & r_{32} & r_{33} & t_z \end{bmatrix}}_{\mathbf{[R|t]} \text{ (外参)}}
-\begin{bmatrix} U \\ V \\ W \\ 1 \end{bmatrix}
+s \begin{bmatrix} u \\ v \\ 1 \end{bmatrix} = \underbrace{\begin{bmatrix} f_x & 0 & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{bmatrix}}_{\mathbf{K} \text{ (内参)}} \underbrace{\begin{bmatrix} r_{11} & r_{12} & r_{13} & t_x \\ r_{21} & r_{22} & r_{23} & t_y \\ r_{31} & r_{32} & r_{33} & t_z \end{bmatrix}}_{[\mathbf{R}|\mathbf{t}] \text{ (外参)}} \begin{bmatrix} U \\ V \\ W \\ 1 \end{bmatrix}
 $$
-
 
 工程里对应实现：
 
